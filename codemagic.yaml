@@ -1,0 +1,80 @@
+workflows:
+  ios-release:
+    name: iOS Release Build
+    instance_type: mac_mini_m1
+    max_build_duration: 120
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.movieapp.app
+      vars:
+        XCODE_WORKSPACE: ios/Runner.xcworkspace
+        XCODE_SCHEME: Runner
+    triggering:
+      events:
+        - push
+      branch:
+        include_patterns:
+          - main
+    scripts:
+      - name: Set up code signing
+        script: |
+          keychain initialize
+      - name: Get Flutter packages
+        script: |
+          flutter pub get
+      - name: Install pods
+        script: |
+          find . -name "Podfile" -exec rm {} \;
+          cd ios
+          pod install --repo-update
+          cd ..
+      - name: Build iOS app
+        script: |
+          flutter build ipa \
+            --release \
+            --dart-define=DART_OBFUSCATION=false
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      email:
+        recipients:
+          - $CODEMAGIC_BUILD_NOTIFY_EMAIL
+        notify:
+          success: true
+          failure: true
+
+  android-release:
+    name: Android Release Build
+    instance_type: linux_x2
+    max_build_duration: 120
+    environment:
+      android_signing:
+        - movieapp_release_key
+      vars:
+        JAVA_TOOL_OPTIONS: "-Xmx3g"
+    triggering:
+      events:
+        - push
+      branch:
+        include_patterns:
+          - main
+    scripts:
+      - name: Get Flutter packages
+        script: |
+          flutter pub get
+      - name: Build Android app
+        script: |
+          flutter build apk \
+            --release \
+            -v
+    artifacts:
+      - build/app/outputs/flutter-apk/app-release.apk
+    publishing:
+      email:
+        recipients:
+          - $CODEMAGIC_BUILD_NOTIFY_EMAIL
+        notify:
+          success: true
+          failure: true
