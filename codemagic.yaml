@@ -26,12 +26,11 @@ workflows:
           cd ..
       - name: Build iOS app
         script: |
-          flutter build ipa \
+          flutter build ios \
             --release \
-            --dart-define=DART_OBFUSCATION=false
+            --simulator
     artifacts:
-      - build/ios/ipa/*.ipa
-      - /tmp/xcodebuild_logs/*.log
+      - build/ios/Release-iphonesimulator/*.app
 
   android-release:
     name: Android Release Build
