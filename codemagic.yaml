@@ -14,8 +14,7 @@ workflows:
       events:
         - push
       branch:
-        include_patterns:
-          - main
+        pattern: main
     scripts:
       - name: Set up code signing
         script: |
@@ -58,8 +57,7 @@ workflows:
       events:
         - push
       branch:
-        include_patterns:
-          - main
+        pattern: main
     scripts:
       - name: Get Flutter packages
         script: |
