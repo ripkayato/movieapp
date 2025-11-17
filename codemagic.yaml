@@ -34,13 +34,6 @@ workflows:
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
-    publishing:
-      email:
-        recipients:
-          - $CODEMAGIC_BUILD_NOTIFY_EMAIL
-        notify:
-          success: true
-          failure: true
 
   android-release:
     name: Android Release Build
@@ -65,10 +58,3 @@ workflows:
             -v
     artifacts:
       - build/app/outputs/flutter-apk/app-release.apk
-    publishing:
-      email:
-        recipients:
-          - $CODEMAGIC_BUILD_NOTIFY_EMAIL
-        notify:
-          success: true
-          failure: true
