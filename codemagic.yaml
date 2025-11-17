@@ -27,10 +27,9 @@ workflows:
       - name: Build iOS app
         script: |
           flutter build ios \
-            --release \
             --simulator
     artifacts:
-      - build/ios/Release-iphonesimulator/*.app
+      - build/ios/iphonesimulator/*.app
 
   android-release:
     name: Android Release Build
