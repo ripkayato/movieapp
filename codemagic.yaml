@@ -8,6 +8,7 @@ workflows:
       vars:
         XCODE_WORKSPACE: ios/Runner.xcworkspace
         XCODE_SCHEME: Runner
+        IPHONEOS_DEPLOYMENT_TARGET: 15.0
     triggering:
       events:
         - push
@@ -18,19 +19,16 @@ workflows:
       - name: Get Flutter packages
         script: |
           flutter pub get
-      - name: Update iOS deployment target
-        script: |
-          sed -i '' 's/platform :ios.*/platform :ios, '\''15.0'\''/' ios/Podfile
       - name: Install pods
         script: |
-          find . -name "Podfile" -exec rm {} \;
           cd ios
-          pod install --repo-update
+          pod install
           cd ..
       - name: Build iOS app
         script: |
           flutter build ios \
-            --simulator
+            --simulator \
+            --dart-define=DART_OBFUSCATION=false
     artifacts:
       - build/ios/iphonesimulator/*.app
 
