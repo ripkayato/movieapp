@@ -3,8 +3,8 @@ workflows:
     name: iOS Release Build
     instance_type: mac_mini_m1
     max_build_duration: 120
-    flutter: stable
     environment:
+      flutter: stable
       vars:
         XCODE_WORKSPACE: ios/Runner.xcworkspace
         XCODE_SCHEME: Runner
@@ -37,8 +37,8 @@ workflows:
     name: Android Release Build
     instance_type: linux_x2
     max_build_duration: 120
-    flutter: stable
     environment:
+      flutter: stable
       android_signing:
         - movieapp_release_key
       vars:
